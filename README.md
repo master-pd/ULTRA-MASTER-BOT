@@ -40,7 +40,7 @@
 ### Quick Start
 ```bash
 # 1. Clone repository
-git clone https://github.com/your-username/ULTRA-MASTER-BOT.git
+git clone https://github.com/master-pd/ULTRA-MASTER-BOT.git
 cd ULTRA-MASTER-BOT
 
 # 2. Run setup script
