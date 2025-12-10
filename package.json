@@ -1,0 +1,52 @@
+{
+  "name": "master-ultra-bot",
+  "version": "4.0.0",
+  "description": "Ultra Advanced Facebook Bot with AI, Diagrams & Images",
+  "main": "web_dashboard/js/master.js",
+  "scripts": {
+    "start": "python run_ultra.py",
+    "web": "python -m http.server 8080 --directory web_dashboard",
+    "setup": "bash scripts/setup_ultra.sh",
+    "update": "python scripts/auto_update.py",
+    "backup": "python scripts/backup_system.py",
+    "monitor": "node scripts/monitor_bot.js",
+    "test": "python -m pytest tests/",
+    "lint": "flake8 bot_core/ scripts/",
+    "format": "black bot_core/ scripts/ run_ultra.py"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.0",
+    "socket.io-client": "^4.7.2",
+    "axios": "^1.6.2",
+    "html2canvas": "^1.4.1",
+    "dom-to-image": "^2.6.0",
+    "bootstrap": "^5.3.2",
+    "jquery": "^3.7.1",
+    "animate.css": "^4.1.1",
+    "font-awesome": "^4.7.0",
+    "moment": "^2.29.4",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "eslint": "^8.54.0",
+    "prettier": "^3.1.0"
+  },
+  "author": "RANA (MASTER 🪓)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/ULTRA-MASTER-BOT.git"
+  },
+  "keywords": [
+    "ai",
+    "bot",
+    "facebook",
+    "automation",
+    "bengali",
+    "nlp",
+    "diagram",
+    "image-generation"
+  ]
+}
