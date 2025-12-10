@@ -1,0 +1,41 @@
+{
+  "bot": {
+    "name": "MASTER 🪓",
+    "author": "RANA",
+    "version": "4.0 ULTRA",
+    "github_update": true,
+    "github_url": "https://github.com/your-username/ULTRA-MASTER-BOT"
+  },
+  "facebook": {
+    "max_messages_per_day": 100,
+    "delay_between_messages": 3,
+    "auto_join_groups": true,
+    "stealth_mode": true,
+    "proxy_rotation": true
+  },
+  "learning": {
+    "auto_learn": true,
+    "learning_rate": 0.8,
+    "max_memory_items": 1000,
+    "response_accuracy_target": 0.9
+  },
+  "diagrams": {
+    "auto_generate": true,
+    "default_type": "mind_map",
+    "image_quality": "high",
+    "save_to_cloud": true
+  },
+  "images": {
+    "auto_generate": true,
+    "default_style": "info",
+    "image_width": 800,
+    "image_height": 600
+  },
+  "security": {
+    "encryption": true,
+    "auto_backup": true,
+    "backup_interval": 3600,
+    "anti_detection": true,
+    "proxy_list": []
+  }
+}

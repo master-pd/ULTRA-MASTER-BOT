@@ -1,0 +1,62 @@
+{
+  "flowchart": {
+    "node_width": 120,
+    "node_height": 60,
+    "node_color": "#3498db",
+    "text_color": "#ffffff",
+    "line_color": "#2980b9",
+    "arrow_size": 10,
+    "padding": 30,
+    "direction": "horizontal"
+  },
+  "mind_map": {
+    "central_node_size": 3000,
+    "child_node_size": 1000,
+    "central_color": "#e74c3c",
+    "child_color": "#2ecc71",
+    "line_color": "#95a5a6",
+    "line_width": 2,
+    "spacing": 150
+  },
+  "bar_chart": {
+    "bar_color": "#9b59b6",
+    "axis_color": "#7f8c8d",
+    "grid_color": "#ecf0f1",
+    "title_size": 16,
+    "label_size": 12,
+    "animation": true
+  },
+  "pie_chart": {
+    "color_palette": ["#3498db", "#2ecc71", "#e74c3c", "#f39c12", "#9b59b6", "#1abc9c", "#d35400"],
+    "explode": 0.05,
+    "shadow": true,
+    "percentage": true
+  },
+  "timeline": {
+    "line_color": "#34495e",
+    "event_color": "#3498db",
+    "date_color": "#7f8c8d",
+    "event_size": 400,
+    "date_size": 12,
+    "orientation": "horizontal"
+  },
+  "network": {
+    "node_size": 800,
+    "edge_width": 2,
+    "node_color": "#3498db",
+    "edge_color": "#bdc3c7",
+    "layout": "spring",
+    "iterations": 50
+  },
+  "general": {
+    "image_width": 1200,
+    "image_height": 800,
+    "background_color": "#ffffff",
+    "font_family": "Arial, Helvetica, sans-serif",
+    "default_format": "png",
+    "quality": 95,
+    "dpi": 300,
+    "auto_save": true,
+    "save_path": "data/diagrams/"
+  }
+}
