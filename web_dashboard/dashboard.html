@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASTER 🪓 - Dashboard</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/master.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Socket.io -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body class="dark-theme">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-robot"></i>
+            <span>MASTER 🪓</span>
+        </div>
+        
+        <div class="nav-menu">
+            <a href="#dashboard" class="nav-item active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#messages" class="nav-item">
+                <i class="fas fa-comments"></i>
+                <span>Messages</span>
+            </a>
+            <a href="#diagrams" class="nav-item">
+                <i class="fas fa-project-diagram"></i>
+                <span>Diagrams</span>
+            </a>
+            <a href="#images" class="nav-item">
+                <i class="fas fa-image"></i>
+                <span>Images</span>
+            </a>
+            <a href="#analytics" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="#settings" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+        
+        <div class="nav-actions">
+            <div class="status-badge status-running">
+                <i class="fas fa-circle"></i>
+                <span>Running</span>
+            </div>
+            <button class="btn btn-danger btn-sm" id="stop-bot">
+                <i class="fas fa-stop"></i> Stop
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="content-header">
+            <h1>
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </h1>
+            <div class="header-actions">
+                <button class="btn btn-primary" id="refresh-stats">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <button class="btn btn-success" id="start-bot">
+                    <i class="fas fa-play"></i> Start Bot
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <!-- Message Stats -->
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Messages</h3>
+                    <div class="stat-numbers">
+                        <div class="stat-item">
+                            <span class="stat-label">Total</span>
+                            <span class="stat-value" id="total-messages">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Today</span>
+                            <span class="stat-value" id="messages-today">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Rate</span>
+                            <span class="stat-value" id="response-rate">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diagram Stats -->
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Diagrams</h3>
+                    <div class="stat-numbers">
+                        <div class="stat-item">
+                            <span class="stat-label">Created</span>
+                            <span class="stat-value" id="diagrams-created">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Today</span>
+                            <span class="stat-value" id="diagrams-today">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Types</span>
+                            <span class="stat-value" id="diagram-types">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Stats -->
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-image"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Images</h3>
+                    <div class="stat-numbers">
+                        <div class="stat-item">
+                            <span class="stat-label">Generated</span>
+                            <span class="stat-value" id="images-generated">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Today</span>
+                            <span class="stat-value" id="images-today">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Styles</span>
+                            <span class="stat-value" id="image-styles">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Stats -->
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Learning</h3>
+                    <div class="stat-numbers">
+                        <div class="stat-item">
+                            <span class="stat-label">Knowledge</span>
+                            <span class="stat-value" id="knowledge-items">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Today</span>
+                            <span class="stat-value" id="learned-today">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Accuracy</span>
+                            <span class="stat-value" id="accuracy-rate">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <h3>
+                    <i class="fas fa-chart-line"></i>
+                    Message Activity
+                </h3>
+                <div class="chart-container">
+                    <canvas id="messageChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h3>
+                    <i class="fas fa-chart-pie"></i>
+                    Response Types
+                </h3>
+                <div class="chart-container">
+                    <canvas id="responseChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="activity-section">
+            <h3>
+                <i class="fas fa-history"></i>
+                Recent Activity
+            </h3>
+            <div class="activity-list" id="activity-list">
+                <!-- Activities will be loaded here -->
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p class="activity-text">Bot started successfully</p>
+                        <span class="activity-time">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions-section">
+            <h3>
+                <i class="fas fa-bolt"></i>
+                Quick Actions
+            </h3>
+            <div class="actions-grid">
+                <button class="action-btn" id="send-test-msg">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Send Test Message</span>
+                </button>
+                <button class="action-btn" id="create-diagram">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Create Diagram</span>
+                </button>
+                <button class="action-btn" id="generate-image">
+                    <i class="fas fa-image"></i>
+                    <span>Generate Image</span>
+                </button>
+                <button class="action-btn" id="backup-now">
+                    <i class="fas fa-save"></i>
+                    <span>Backup Now</span>
+                </button>
+                <button class="action-btn" id="check-updates">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Check Updates</span>
+                </button>
+                <button class="action-btn" id="view-logs">
+                    <i class="fas fa-file-alt"></i>
+                    <span>View Logs</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="js/master.js"></script>
+    <script src="js/bot_controller.js"></script>
+    <script src="js/realtime_updates.js"></script>
+    
+    <script>
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize charts
+            initCharts();
+            
+            // Load stats
+            loadStats();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Start realtime updates
+            startRealtimeUpdates();
+        });
+        
+        function initCharts() {
+            // Message chart
+            const messageCtx = document.getElementById('messageChart').getContext('2d');
+            window.messageChart = new Chart(messageCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Messages',
+                        data: [12, 19, 8, 15, 22, 18, 25],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // Response chart
+            const responseCtx = document.getElementById('responseChart').getContext('2d');
+            window.responseChart = new Chart(responseCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Text', 'Diagram', 'Image', 'Other'],
+                    datasets: [{
+                        data: [40, 25, 20, 15],
+                        backgroundColor: [
+                            '#3498db',
+                            '#2ecc71',
+                            '#e74c3c',
+                            '#f39c12'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        function loadStats() {
+            fetch('/api/stats')
+                .then(response => response.json())
+                .then(data => updateStats(data))
+                .catch(error => console.error('Error loading stats:', error));
+        }
+        
+        function updateStats(stats) {
+            // Update all stat values
+            Object.keys(stats).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = stats[key];
+                }
+            });
+        }
+        
+        function setupEventListeners() {
+            // Refresh stats
+            document.getElementById('refresh-stats').addEventListener('click', loadStats);
+            
+            // Start/Stop bot
+            document.getElementById('start-bot').addEventListener('click', () => {
+                window.botController.startBot();
+            });
+            
+            document.getElementById('stop-bot').addEventListener('click', () => {
+                window.botController.stopBot();
+            });
+            
+            // Quick actions
+            document.getElementById('send-test-msg').addEventListener('click', () => {
+                const message = prompt('Enter test message:');
+                if (message) {
+                    window.botController.sendTestMessage(message);
+                }
+            });
+            
+            document.getElementById('create-diagram').addEventListener('click', () => {
+                window.location.hash = 'diagrams';
+            });
+            
+            document.getElementById('generate-image').addEventListener('click', () => {
+                window.location.hash = 'images';
+            });
+            
+            document.getElementById('backup-now').addEventListener('click', () => {
+                window.botController.createBackup();
+            });
+            
+            document.getElementById('check-updates').addEventListener('click', () => {
+                window.botController.checkForUpdates();
+            });
+            
+            document.getElementById('view-logs').addEventListener('click', () => {
+                window.open('/logs', '_blank');
+            });
+        }
+        
+        function startRealtimeUpdates() {
+            // Connect to WebSocket
+            const socket = io('ws://localhost:8080');
+            
+            socket.on('connect', () => {
+                console.log('Connected to WebSocket');
+            });
+            
+            socket.on('stats_update', (data) => {
+                updateStats(data);
+            });
+            
+            socket.on('activity', (activity) => {
+                addActivity(activity);
+            });
+            
+            socket.on('disconnect', () => {
+                console.log('Disconnected from WebSocket');
+            });
+        }
+        
+        function addActivity(activity) {
+            const activityList = document.getElementById('activity-list');
+            if (!activityList) return;
+            
+            const activityItem = document.createElement('div');
+            activityItem.className = 'activity-item animate__animated animate__fadeIn';
+            
+            let icon = 'fa-robot';
+            let color = '#3498db';
+            
+            switch(activity.type) {
+                case 'message':
+                    icon = 'fa-comment';
+                    color = '#2ecc71';
+                    break;
+                case 'diagram':
+                    icon = 'fa-project-diagram';
+                    color = '#9b59b6';
+                    break;
+                case 'image':
+                    icon = 'fa-image';
+                    color = '#e74c3c';
+                    break;
+                case 'error':
+                    icon = 'fa-exclamation-triangle';
+                    color = '#f39c12';
+                    break;
+            }
+            
+            activityItem.innerHTML = `
+                <div class="activity-icon" style="color: ${color}">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="activity-content">
+                    <p class="activity-text">${activity.text}</p>
+                    <span class="activity-time">${new Date(activity.timestamp).toLocaleTimeString()}</span>
+                </div>
+            `;
+            
+            activityList.prepend(activityItem);
+            
+            // Keep only last 10 activities
+            if (activityList.children.length > 10) {
+                activityList.removeChild(activityList.lastChild);
+            }
+        }
+    </script>
+</body>
+</html>

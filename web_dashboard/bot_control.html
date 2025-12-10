@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASTER 🪓 - Bot Control</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/master.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dark-theme">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-robot"></i>
+            <span>MASTER 🪓 Control Panel</span>
+        </div>
+        <div class="nav-menu">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+            </a>
+            <a href="bot_control.html" class="nav-item active">
+                <i class="fas fa-gamepad"></i>
+                Control
+            </a>
+            <a href="#messages" class="nav-item">
+                <i class="fas fa-comments"></i>
+                Messages
+            </a>
+            <a href="#logs" class="nav-item">
+                <i class="fas fa-file-alt"></i>
+                Logs
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="content-header">
+            <h1>
+                <i class="fas fa-gamepad"></i>
+                Bot Control Panel
+            </h1>
+            <div class="bot-status">
+                <span class="status-badge status-running" id="bot-status">
+                    <i class="fas fa-circle"></i>
+                    Running
+                </span>
+            </div>
+        </header>
+
+        <!-- Control Grid -->
+        <div class="control-grid">
+            <!-- Start/Stop Controls -->
+            <div class="control-card">
+                <h3>
+                    <i class="fas fa-power-off"></i>
+                    Power Controls
+                </h3>
+                <div class="control-buttons">
+                    <button class="btn btn-success btn-lg" id="start-bot">
+                        <i class="fas fa-play"></i> Start Bot
+                    </button>
+                    <button class="btn btn-danger btn-lg" id="stop-bot">
+                        <i class="fas fa-stop"></i> Stop Bot
+                    </button>
+                    <button class="btn btn-warning btn-lg" id="restart-bot">
+                        <i class="fas fa-redo"></i> Restart Bot
+                    </button>
+                </div>
+                <div class="control-info">
+                    <p><strong>Bot Uptime:</strong> <span id="bot-uptime">00:00:00</span></p>
+                    <p><strong>Last Started:</strong> <span id="last-started">Never</span></p>
+                </div>
+            </div>
+
+            <!-- Message Controls -->
+            <div class="control-card">
+                <h3>
+                    <i class="fas fa-comments"></i>
+                    Message Controls
+                </h3>
+                <div class="control-group">
+                    <label for="message-mode">Message Mode:</label>
+                    <select id="message-mode" class="form-control">
+                        <option value="auto">Auto Reply</option>
+                        <option value="manual">Manual Only</option>
+                        <option value="learning">Learning Mode</option>
+                        <option value="disabled">Disabled</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="max-messages">Max Messages/Day:</label>
+                    <input type="range" id="max-messages" min="10" max="500" value="100" class="form-control">
+                    <span id="max-messages-value">100</span>
+                </div>
+                <div class="control-group">
+                    <label for="response-delay">Response Delay (s):</label>
+                    <input type="number" id="response-delay" min="1" max="10" value="3" class="form-control">
+                </div>
+                <button class="btn btn-primary" id="save-message-settings">
+                    <i class="fas fa-save"></i> Save Settings
+                </button>
+            </div>
+
+            <!-- Learning Controls -->
+            <div class="control-card">
+                <h3>
+                    <i class="fas fa-brain"></i>
+                    Learning Controls
+                </h3>
+                <div class="control-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="auto-learning" checked>
+                        <label for="auto-learning">Auto Learning</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="learning-rate">Learning Rate:</label>
+                    <input type="range" id="learning-rate" min="0.1" max="1" step="0.1" value="0.8" class="form-control">
+                    <span id="learning-rate-value">0.8</span>
+                </div>
+                <div class="control-group">
+                    <label for="memory-size">Memory Size:</label>
+                    <select id="memory-size" class="form-control">
+                        <option value="small">Small (500 items)</option>
+                        <option value="medium" selected>Medium (1000 items)</option>
+                        <option value="large">Large (5000 items)</option>
+                        <option value="unlimited">Unlimited</option>
+                    </select>
+                </div>
+                <div class="control-buttons">
+                    <button class="btn btn-info" id="clear-memory">
+                        <i class="fas fa-eraser"></i> Clear Memory
+                    </button>
+                    <button class="btn btn-info" id="export-knowledge">
+                        <i class="fas fa-download"></i> Export Knowledge
+                    </button>
+                </div>
+            </div>
+
+            <!-- Security Controls -->
+            <div class="control-card">
+                <h3>
+                    <i class="fas fa-shield-alt"></i>
+                    Security Controls
+                </h3>
+                <div class="control-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="stealth-mode" checked>
+                        <label for="stealth-mode">Stealth Mode</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="proxy-rotation" checked>
+                        <label for="proxy-rotation">Proxy Rotation</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="auto-backup" checked>
+                        <label for="auto-backup">Auto Backup</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="backup-interval">Backup Interval (hours):</label>
+                    <input type="number" id="backup-interval" min="1" max="24" value="6" class="form-control">
+                </div>
+                <button class="btn btn-warning" id="emergency-stop">
+                    <i class="fas fa-skull-crossbones"></i> Emergency Stop
+                </button>
+            </div>
+        </div>
+
+        <!-- Command Console -->
+        <div class="control-card full-width">
+            <h3>
+                <i class="fas fa-terminal"></i>
+                Command Console
+            </h3>
+            <div class="console-container">
+                <div class="console-output" id="console-output">
+                    <div class="console-line">
+                        <span class="console-prompt">$</span>
+                        <span class="console-text">MASTER 🪓 Bot Control Console v4.0</span>
+                    </div>
+                    <div class="console-line">
+                        <span class="console-prompt">$</span>
+                        <span class="console-text">Type 'help' for available commands</span>
+                    </div>
+                </div>
+                <div class="console-input">
+                    <span class="console-prompt">$</span>
+                    <input type="text" id="console-input" class="form-control" placeholder="Type command here...">
+                    <button class="btn btn-primary" id="console-send">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </div>
+            </div>
+            <div class="console-help">
+                <strong>Available Commands:</strong>
+                <code>help</code> <code>status</code> <code>stats</code> <code>clear</code>
+                <code>test message</code> <code>backup</code> <code>update</code> <code>restart</code>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="control-card full-width">
+            <h3>
+                <i class="fas fa-bolt"></i>
+                Quick Actions
+            </h3>
+            <div class="quick-actions-grid">
+                <button class="action-btn" id="send-test-msg">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Send Test Message</span>
+                </button>
+                <button class="action-btn" id="create-backup">
+                    <i class="fas fa-save"></i>
+                    <span>Create Backup</span>
+                </button>
+                <button class="action-btn" id="check-updates">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Check Updates</span>
+                </button>
+                <button class="action-btn" id="clear-cache">
+                    <i class="fas fa-trash"></i>
+                    <span>Clear Cache</span>
+                </button>
+                <button class="action-btn" id="view-logs">
+                    <i class="fas fa-file-alt"></i>
+                    <span>View Logs</span>
+                </button>
+                <button class="action-btn" id="export-config">
+                    <i class="fas fa-download"></i>
+                    <span>Export Config</span>
+                </button>
+                <button class="action-btn" id="import-config">
+                    <i class="fas fa-upload"></i>
+                    <span>Import Config</span>
+                </button>
+                <button class="action-btn" id="reset-settings">
+                    <i class="fas fa-undo"></i>
+                    <span>Reset Settings</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Real-time Monitoring -->
+        <div class="control-card full-width">
+            <h3>
+                <i class="fas fa-chart-line"></i>
+                Real-time Monitoring
+            </h3>
+            <div class="monitoring-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h4>CPU Usage</h4>
+                        <div class="metric-value" id="cpu-usage">0%</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="cpu-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-memory"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h4>Memory Usage</h4>
+                        <div class="metric-value" id="memory-usage">0%</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="memory-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-hdd"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h4>Disk Usage</h4>
+                        <div class="metric-value" id="disk-usage">0%</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="disk-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h4>Network</h4>
+                        <div class="metric-value" id="network-status">Offline</div>
+                        <div class="metric-subtext" id="response-time">Ping: 0ms</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="js/bot_controller.js"></script>
+    
+    <script>
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize controls
+            initializeControls();
+            
+            // Load current settings
+            loadSettings();
+            
+            // Start monitoring
+            startMonitoring();
+            
+            // Setup event listeners
+            setupEventListeners();
+        });
+        
+        function initializeControls() {
+            // Update slider values
+            const maxMessages = document.getElementById('max-messages');
+            const maxMessagesValue = document.getElementById('max-messages-value');
+            
+            maxMessages.addEventListener('input', function() {
+                maxMessagesValue.textContent = this.value;
+            });
+            
+            // Learning rate slider
+            const learningRate = document.getElementById('learning-rate');
+            const learningRateValue = document.getElementById('learning-rate-value');
+            
+            learningRate.addEventListener('input', function() {
+                learningRateValue.textContent = this.value;
+            });
+        }
+        
+        function loadSettings() {
+            // Load settings from localStorage
+            const settings = JSON.parse(localStorage.getItem('bot_settings') || '{}');
+            
+            // Apply settings to controls
+            if (settings.message_mode) {
+                document.getElementById('message-mode').value = settings.message_mode;
+            }
+            
+            if (settings.max_messages) {
+                document.getElementById('max-messages').value = settings.max_messages;
+                document.getElementById('max-messages-value').textContent = settings.max_messages;
+            }
+            
+            if (settings.response_delay) {
+                document.getElementById('response-delay').value = settings.response_delay;
+            }
+            
+            if (settings.auto_learning !== undefined) {
+                document.getElementById('auto-learning').checked = settings.auto_learning;
+            }
+            
+            if (settings.learning_rate) {
+                document.getElementById('learning-rate').value = settings.learning_rate;
+                document.getElementById('learning-rate-value').textContent = settings.learning_rate;
+            }
+            
+            if (settings.memory_size) {
+                document.getElementById('memory-size').value = settings.memory_size;
+            }
+            
+            if (settings.stealth_mode !== undefined) {
+                document.getElementById('stealth-mode').checked = settings.stealth_mode;
+            }
+            
+            if (settings.proxy_rotation !== undefined) {
+                document.getElementById('proxy-rotation').checked = settings.proxy_rotation;
+            }
+            
+            if (settings.auto_backup !== undefined) {
+                document.getElementById('auto-backup').checked = settings.auto_backup;
+            }
+            
+            if (settings.backup_interval) {
+                document.getElementById('backup-interval').value = settings.backup_interval;
+            }
+            
+            // Load bot status
+            updateBotStatus();
+        }
+        
+        function saveSettings() {
+            const settings = {
+                message_mode: document.getElementById('message-mode').value,
+                max_messages: document.getElementById('max-messages').value,
+                response_delay: document.getElementById('response-delay').value,
+                auto_learning: document.getElementById('auto-learning').checked,
+                learning_rate: document.getElementById('learning-rate').value,
+                memory_size: document.getElementById('memory-size').value,
+                stealth_mode: document.getElementById('stealth-mode').checked,
+                proxy_rotation: document.getElementById('proxy-rotation').checked,
+                auto_backup: document.getElementById('auto-backup').checked,
+                backup_interval: document.getElementById('backup-interval').value
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('bot_settings', JSON.stringify(settings));
+            
+            // Send to bot
+            sendSettingsToBot(settings);
+            
+            showNotification('Settings saved successfully!', 'success');
+        }
+        
+        function sendSettingsToBot(settings) {
+            fetch('/api/bot/settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(settings)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    showNotification('Failed to update bot settings', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error sending settings:', error);
+            });
+        }
+        
+        function updateBotStatus() {
+            fetch('/api/bot/status')
+                .then(response => response.json())
+                .then(data => {
+                    const statusElement = document.getElementById('bot-status');
+                    
+                    if (data.status === 'running') {
+                        statusElement.className = 'status-badge status-running';
+                        statusElement.innerHTML = '<i class="fas fa-circle"></i> Running';
+                        
+                        // Update uptime
+                        if (data.uptime) {
+                            document.getElementById('bot-uptime').textContent = formatUptime(data.uptime);
+                        }
+                        
+                        if (data.last_started) {
+                            document.getElementById('last-started').textContent = 
+                                new Date(data.last_started).toLocaleString();
+                        }
+                    } else {
+                        statusElement.className = 'status-badge status-stopped';
+                        statusElement.innerHTML = '<i class="fas fa-circle"></i> Stopped';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching bot status:', error);
+                });
+        }
+        
+        function formatUptime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = Math.floor(seconds % 60);
+            
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        function startMonitoring() {
+            // Update metrics every 5 seconds
+            setInterval(updateMetrics, 5000);
+            
+            // Initial update
+            updateMetrics();
+        }
+        
+        function updateMetrics() {
+            // Fetch system metrics
+            fetch('/api/system/metrics')
+                .then(response => response.json())
+                .then(data => {
+                    // Update CPU
+                    document.getElementById('cpu-usage').textContent = `${data.cpu}%`;
+                    document.getElementById('cpu-bar').style.width = `${data.cpu}%`;
+                    
+                    // Update Memory
+                    document.getElementById('memory-usage').textContent = `${data.memory}%`;
+                    document.getElementById('memory-bar').style.width = `${data.memory}%`;
+                    
+                    // Update Disk
+                    document.getElementById('disk-usage').textContent = `${data.disk}%`;
+                    document.getElementById('disk-bar').style.width = `${data.disk}%`;
+                    
+                    // Update Network
+                    document.getElementById('network-status').textContent = data.network.online ? 'Online' : 'Offline';
+                    document.getElementById('response-time').textContent = `Ping: ${data.network.ping}ms`;
+                })
+                .catch(error => {
+                    console.error('Error fetching metrics:', error);
+                });
+        }
+        
+        function setupEventListeners() {
+            // Power controls
+            document.getElementById('start-bot').addEventListener('click', () => {
+                if (confirm('Start the bot?')) {
+                    fetch('/api/bot/start', { method: 'POST' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                showNotification('Bot started successfully!', 'success');
+                                updateBotStatus();
+                            } else {
+                                showNotification('Failed to start bot', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            showNotification('Error starting bot', 'error');
+                        });
+                }
+            });
+            
+            document.getElementById('stop-bot').addEventListener('click', () => {
+                if (confirm('Stop the bot?')) {
+                    fetch('/api/bot/stop', { method: 'POST' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                showNotification('Bot stopped successfully!', 'success');
+                                updateBotStatus();
+                            } else {
+                                showNotification('Failed to stop bot', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            showNotification('Error stopping bot', 'error');
+                        });
+                }
+            });
+            
+            document.getElementById('restart-bot').addEventListener('click', () => {
+                if (confirm('Restart the bot?')) {
+                    fetch('/api/bot/restart', { method: 'POST' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                showNotification('Bot restart initiated', 'success');
+                            } else {
+                                showNotification('Failed to restart bot', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            showNotification('Error restarting bot', 'error');
+                        });
+                }
+            });
+            
+            // Save settings
+            document.getElementById('save-message-settings').addEventListener('click', saveSettings);
+            
+            // Learning controls
+            document.getElementById('clear-memory').addEventListener('click', () => {
+                if (confirm('Clear all learned memory? This cannot be undone!')) {
+                    fetch('/api/bot/clear-memory', { method: 'POST' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                showNotification('Memory cleared successfully!', 'success');
+                            } else {
+                                showNotification('Failed to clear memory', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            showNotification('Error clearing memory', 'error');
+                        });
+                }
+            });
+            
+            document.getElementById('export-knowledge').addEventListener('click', () => {
+                fetch('/api/bot/export-knowledge')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Create download link
+                            const blob = new Blob([JSON.stringify(data.knowledge, null, 2)], 
+                                { type: 'application/json' });
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.download = 'bot_knowledge.json';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            URL.revokeObjectURL(url);
+                            
+                            showNotification('Knowledge exported successfully!', 'success');
+                        } else {
+                            showNotification('Failed to export knowledge', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showNotification('Error exporting knowledge', 'error');
+                    });
+            });
+            
+            // Emergency stop
+            document.getElementById('emergency-stop').addEventListener('click', () => {
+                if (confirm('EMERGENCY STOP: This will immediately stop the bot and clear all sensitive data. Continue?')) {
+                    fetch('/api/bot/emergency-stop', { method: 'POST' })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                showNotification('Emergency stop executed!', 'warning');
+                                updateBotStatus();
+                            } else {
+                                showNotification('Emergency stop failed', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            showNotification('Error executing emergency stop', 'error');
+                        });
+                }
+            });
+            
+            // Console commands
+            const consoleInput = document.getElementById('console-input');
+            const consoleOutput = document.getElementById('console-output');
+            
+            document.getElementById('console-send').addEventListener('click', executeCommand);
+            consoleInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    executeCommand();
+                }
+            });
+            
+            function executeCommand() {
+                const command = consoleInput.value.trim();
+                if (!command) return;
+                
+                // Add command to console
+                addConsoleLine(`$ ${command}`, 'command');
+                
+                // Clear input
+                consoleInput.value = '';
+                
+                // Execute command
+                fetch('/api/bot/command', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ command: command })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        addConsoleLine(data.response, 'response');
+                    } else {
+                        addConsoleLine(`Error: ${data.error}`, 'error');
+                    }
+                })
+                .catch(error => {
+                    addConsoleLine(`Network error: ${error.message}`, 'error');
+                });
+            }
+            
+            function addConsoleLine(text, type = 'text') {
+                const line = document.createElement('div');
+                line.className = `console-line console-${type}`;
+                
+                if (type === 'command') {
+                    line.innerHTML = `<span class="console-prompt">$</span><span class="console-text">${text}</span>`;
+                } else {
+                    line.innerHTML = `<span class="console-text">${text}</span>`;
+                }
+                
+                consoleOutput.appendChild(line);
+                consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            }
+            
+            // Quick actions
+            document.getElementById('send-test-msg').addEventListener('click', () => {
+                const message = prompt('Enter test message:');
+                if (message) {
+                    fetch('/api/bot/test-message', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ message: message })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showNotification('Test message sent!', 'success');
+                        } else {
+                            showNotification('Failed to send test message', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showNotification('Error sending test message', 'error');
+                    });
+                }
+            });
+            
+            document.getElementById('create-backup').addEventListener('click', () => {
+                fetch('/api/backup/create', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showNotification('Backup created successfully!', 'success');
+                        } else {
+                            showNotification('Backup failed', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showNotification('Error creating backup', 'error');
+                    });
+            });
+            
+            document.getElementById('check-updates').addEventListener('click', () => {
+                fetch('/api/updates/check')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.update_available) {
+                            if (confirm(`Update available: ${data.new_version}\nApply update now?`)) {
+                                fetch('/api/updates/apply', { method: 'POST' })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            showNotification('Update applied! Restarting...', 'success');
+                                            setTimeout(() => location.reload(), 2000);
+                                        }
+                                    });
+                            }
+                        } else {
+                            showNotification('Bot is up to date!', 'success');
+                        }
+                    })
+                    .catch(error => {
+                        showNotification('Error checking updates', 'error');
+                    });
+            });
+            
+            // Add more event listeners for other buttons...
+        }
+        
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="notification-close">&times;</button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Add close functionality
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                notification.remove();
+            });
+            
+            // Auto remove
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASTER 🪓 ULTRA BOT</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/dark-theme.css">
+    <link rel="stylesheet" href="css/master.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Socket.io -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="logo-text">
+                <h1>MASTER 🪓 ULTRA BOT</h1>
+                <p class="subtitle">Advanced AI Assistant v4.0</p>
+            </div>
+        </div>
+        
+        <div class="header-controls">
+            <div class="status">
+                <span class="status-label">Status:</span>
+                <span id="bot-status" class="status-badge status-disconnected">Disconnected</span>
+            </div>
+            <div class="time" id="current-time">--:--:--</div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt nav-icon"></i>
+                        <span>ড্যাশবোর্ড</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#messages" class="nav-link" data-page="messages">
+                        <i class="fas fa-comments nav-icon"></i>
+                        <span>মেসেজেস</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#diagrams" class="nav-link" data-page="diagrams">
+                        <i class="fas fa-project-diagram nav-icon"></i>
+                        <span>ডায়াগ্রামস</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#images" class="nav-link" data-page="images">
+                        <i class="fas fa-image nav-icon"></i>
+                        <span>ইমেজেস</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#learning" class="nav-link" data-page="learning">
+                        <i class="fas fa-brain nav-icon"></i>
+                        <span>লার্নিং</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#settings" class="nav-link" data-page="settings">
+                        <i class="fas fa-cog nav-icon"></i>
+                        <span>সেটিংস</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#analytics" class="nav-link" data-page="analytics">
+                        <i class="fas fa-chart-line nav-icon"></i>
+                        <span>এনালিটিক্স</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- Bot Info -->
+            <div class="bot-info">
+                <div class="info-item">
+                    <i class="fas fa-user"></i>
+                    <span id="bot-author">RANA</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-code-branch"></i>
+                    <span id="bot-version">v4.0</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-heart"></i>
+                    <span id="bot-name">MASTER 🪓</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content Area -->
+        <main class="content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <div class="page-header">
+                    <h2><i class="fas fa-tachometer-alt"></i> ড্যাশবোর্ড</h2>
+                    <div class="controls">
+                        <button id="start-bot" class="btn btn-success">
+                            <i class="fas fa-play"></i> Start Bot
+                        </button>
+                        <button id="stop-bot" class="btn btn-danger" disabled>
+                            <i class="fas fa-stop"></i> Stop Bot
+                        </button>
+                        <button id="refresh-stats" class="btn btn-primary">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-title">
+                            <i class="fas fa-comments"></i>
+                            <span>মেসেজ স্ট্যাটাস</span>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-value" id="total-messages">0</span>
+                                <span class="stat-label">Total Messages</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="messages-sent">0</span>
+                                <span class="stat-label">Sent</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="messages-received">0</span>
+                                <span class="stat-label">Received</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="response-rate">0%</span>
+                                <span class="stat-label">Response Rate</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>ডায়াগ্রামস</span>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-value" id="diagrams-created">0</span>
+                                <span class="stat-label">Created</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="diagrams-today">0</span>
+                                <span class="stat-label">Today</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="diagram-types">0</span>
+                                <span class="stat-label">Types</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="diagram-success">0%</span>
+                                <span class="stat-label">Success Rate</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">
+                            <i class="fas fa-image"></i>
+                            <span>ইমেজেস</span>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-value" id="images-generated">0</span>
+                                <span class="stat-label">Generated</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="images-today">0</span>
+                                <span class="stat-label">Today</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="image-types">0</span>
+                                <span class="stat-label">Types</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="image-success">0%</span>
+                                <span class="stat-label">Success Rate</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">
+                            <i class="fas fa-brain"></i>
+                            <span>লার্নিং</span>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-value" id="knowledge-items">0</span>
+                                <span class="stat-label">Knowledge Items</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="learned-today">0</span>
+                                <span class="stat-label">Learned Today</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="accuracy-rate">0%</span>
+                                <span class="stat-label">Accuracy</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="memory-usage">0%</span>
+                                <span class="stat-label">Memory Usage</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="chart-container">
+                    <canvas id="messagesChart"></canvas>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    <div class="actions-grid">
+                        <button id="send-test" class="action-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Send Test Message</span>
+                        </button>
+                        <button id="generate-diagram" class="action-btn">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>Generate Diagram</span>
+                        </button>
+                        <button id="create-image" class="action-btn">
+                            <i class="fas fa-image"></i>
+                            <span>Create Image</span>
+                        </button>
+                        <button id="backup-data" class="action-btn">
+                            <i class="fas fa-save"></i>
+                            <span>Backup Data</span>
+                        </button>
+                        <button id="github-update" class="action-btn">
+                            <i class="fab fa-github"></i>
+                            <span>Update from GitHub</span>
+                        </button>
+                        <button id="clear-cache" class="action-btn">
+                            <i class="fas fa-trash"></i>
+                            <span>Clear Cache</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Page -->
+            <div id="messages-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-comments"></i> মেসেজেস</h2>
+                </div>
+                
+                <div class="message-controls">
+                    <div class="search-box">
+                        <input type="text" id="message-search" placeholder="Search messages...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="filter-controls">
+                        <select id="message-filter">
+                            <option value="all">All Messages</option>
+                            <option value="today">Today</option>
+                            <option value="unread">Unread</option>
+                            <option value="sent">Sent</option>
+                            <option value="received">Received</option>
+                        </select>
+                        <button id="clear-messages" class="btn btn-warning">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="message-log" id="message-log">
+                    <!-- Messages will appear here -->
+                </div>
+                
+                <div class="message-input">
+                    <textarea id="test-message" placeholder="Type a test message here..."></textarea>
+                    <button id="send-test-message" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send Test Message
+                    </button>
+                </div>
+            </div>
+
+            <!-- Diagrams Page -->
+            <div id="diagrams-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-project-diagram"></i> ডায়াগ্রামস</h2>
+                    <button id="create-new-diagram" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Create New
+                    </button>
+                </div>
+                
+                <div class="diagram-creator">
+                    <h3>Create Diagram from Text</h3>
+                    <textarea id="diagram-text" placeholder="Enter text to create diagram..."></textarea>
+                    <div class="diagram-options">
+                        <select id="diagram-type">
+                            <option value="auto">Auto Detect</option>
+                            <option value="flowchart">Flowchart</option>
+                            <option value="mindmap">Mind Map</option>
+                            <option value="barchart">Bar Chart</option>
+                            <option value="piechart">Pie Chart</option>
+                            <option value="timeline">Timeline</option>
+                        </select>
+                        <button id="generate-diagram-btn" class="btn btn-primary">
+                            <i class="fas fa-magic"></i> Generate Diagram
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="diagrams-grid" id="diagrams-grid">
+                    <!-- Diagrams will appear here -->
+                </div>
+            </div>
+
+            <!-- Images Page -->
+            <div id="images-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-image"></i> ইমেজেস</h2>
+                    <button id="create-new-image" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Create New
+                    </button>
+                </div>
+                
+                <div class="image-creator">
+                    <h3>Create Image from Description</h3>
+                    <textarea id="image-description" placeholder="Describe the image you want to create..."></textarea>
+                    <div class="image-options">
+                        <select id="image-style">
+                            <option value="auto">Auto Style</option>
+                            <option value="quote">Quote</option>
+                            <option value="info">Information</option>
+                            <option value="instruction">Instruction</option>
+                            <option value="concept">Concept</option>
+                        </select>
+                        <button id="generate-image-btn" class="btn btn-primary">
+                            <i class="fas fa-paint-brush"></i> Generate Image
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="images-grid" id="images-grid">
+                    <!-- Images will appear here -->
+                </div>
+            </div>
+
+            <!-- Learning Page -->
+            <div id="learning-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-brain"></i> লার্নিং</h2>
+                </div>
+                
+                <div class="learning-stats">
+                    <div class="stat-card">
+                        <h3>Knowledge Base</h3>
+                        <div class="stat-content">
+                            <div class="stat-item">
+                                <span class="stat-label">Total Items:</span>
+                                <span class="stat-value" id="total-knowledge">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Learned Today:</span>
+                                <span class="stat-value" id="learned-today-count">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Accuracy:</span>
+                                <span class="stat-value" id="learning-accuracy">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="knowledge-viewer">
+                        <h3>Recent Learning</h3>
+                        <div class="knowledge-list" id="knowledge-list">
+                            <!-- Knowledge items will appear here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settings-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-cog"></i> সেটিংস</h2>
+                </div>
+                
+                <div class="settings-container">
+                    <!-- Bot Settings -->
+                    <div class="settings-section">
+                        <h3><i class="fas fa-robot"></i> Bot Settings</h3>
+                        <div class="settings-grid">
+                            <div class="setting-item">
+                                <label for="bot-name-input">Bot Name:</label>
+                                <input type="text" id="bot-name-input" value="MASTER 🪓">
+                                <button id="update-bot-name" class="btn-small">
+                                    <i class="fas fa-save"></i> Update
+                                </button>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="learning-rate">Learning Rate:</label>
+                                <input type="range" id="learning-rate" min="0.1" max="1" step="0.1" value="0.8">
+                                <span id="learning-rate-value">0.8</span>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="response-speed">Response Speed:</label>
+                                <select id="response-speed">
+                                    <option value="slow">Slow</option>
+                                    <option value="normal" selected>Normal</option>
+                                    <option value="fast">Fast</option>
+                                    <option value="instant">Instant</option>
+                                </select>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="auto-learning">Auto Learning:</label>
+                                <input type="checkbox" id="auto-learning" checked>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Facebook Settings -->
+                    <div class="settings-section">
+                        <h3><i class="fab fa-facebook"></i> Facebook Settings</h3>
+                        <div class="settings-grid">
+                            <div class="setting-item">
+                                <label for="fb-delay">Action Delay (seconds):</label>
+                                <input type="number" id="fb-delay" min="1" max="10" value="3">
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="max-messages">Max Messages/Day:</label>
+                                <input type="number" id="max-messages" min="10" max="1000" value="100">
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="auto-join">Auto Join Groups:</label>
+                                <input type="checkbox" id="auto-join" checked>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <label for="stealth-mode">Stealth Mode:</label>
+                                <input type="checkbox" id="stealth-mode" checked>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Save Settings -->
+                    <div class="settings-actions">
+                        <button id="save-settings" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save All Settings
+                        </button>
+                        <button id="reset-settings" class="btn btn-warning">
+                            <i class="fas fa-undo"></i> Reset to Default
+                        </button>
+                        <button id="export-settings" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Export Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Page -->
+            <div id="analytics-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-chart-line"></i> এনালিটিক্স</h2>
+                </div>
+                
+                <div class="analytics-container">
+                    <!-- Performance Charts -->
+                    <div class="analytics-section">
+                        <h3>Performance Analytics</h3>
+                        <div class="charts-grid">
+                            <div class="chart-card">
+                                <h4>Messages Over Time</h4>
+                                <canvas id="messagesOverTimeChart"></canvas>
+                            </div>
+                            <div class="chart-card">
+                                <h4>Response Types</h4>
+                                <canvas id="responseTypesChart"></canvas>
+                            </div>
+                            <div class="chart-card">
+                                <h4>Learning Progress</h4>
+                                <canvas id="learningProgressChart"></canvas>
+                            </div>
+                            <div class="chart-card">
+                                <h4>Success Rate</h4>
+                                <canvas id="successRateChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detailed Analytics -->
+                    <div class="analytics-section">
+                        <h3>Detailed Statistics</h3>
+                        <div class="stats-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>Today</th>
+                                        <th>This Week</th>
+                                        <th>This Month</th>
+                                        <th>All Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="analytics-table">
+                                    <!-- Data will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="diagram-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Diagram Preview</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="diagram-content">
+                <!-- Diagram content will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="image-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Image Preview</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="image-content">
+                <!-- Image content will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/master.js"></script>
+    <script src="js/realtime_updates.js"></script>
+    <script src="js/diagram_renderer.js"></script>
+    <script src="js/image_editor.js"></script>
+    
+    <script>
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Page navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Hide all pages
+                    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                    
+                    // Show selected page
+                    const pageId = this.getAttribute('data-page') + '-page';
+                    document.getElementById(pageId).classList.add('active');
+                });
+            });
+            
+            // Update current time
+            function updateTime() {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('bn-BD');
+                document.getElementById('current-time').textContent = timeStr;
+            }
+            
+            setInterval(updateTime, 1000);
+            updateTime();
+            
+            // Initialize bot controller
+            window.botController = new MasterBotController();
+        });
+    </script>
+</body>
+</html>
